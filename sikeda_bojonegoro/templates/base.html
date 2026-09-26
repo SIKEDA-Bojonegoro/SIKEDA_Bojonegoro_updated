@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}SIKEDA Bojonegoro{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="app-body">
+<div class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">♥</span><span><b>SIKEDA</b><small>Sistem Ketersediaan Darah</small></span></a>
+    <div class="role-chip">{{ session.get('role','user')|capitalize }}</div>
+    <nav>
+        <a class="nav-link" href="{{ url_for('dashboard') }}">⌂ <span>Dashboard</span></a>
+        <a class="nav-link" href="{{ url_for('stok') }}">🩸 <span>Stok Darah</span></a>
+        {% if session.get('role') in ['admin','petugas'] %}
+        <a class="nav-link" href="{{ url_for('pasien') }}">♙ <span>Data Pasien</span></a>
+        <a class="nav-link" href="{{ url_for('pendonor') }}">♟ <span>Data Pendonor</span></a>
+        {% endif %}
+        <a class="nav-link" href="{{ url_for('permintaan') }}">▣ <span>Permintaan Darah</span></a>
+        <a class="nav-link" href="{{ url_for('jadwal') }}">◷ <span>Jadwal Donor</span></a>
+        <a class="nav-link" href="{{ url_for('fasilitas') }}">⌖ <span>Fasilitas</span></a>
+        <a class="nav-link" href="{{ url_for('cari_darah') }}">⌕ <span>Cari Ketersediaan</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+        <a class="nav-link" href="{{ url_for('profil') }}">⚙ <span>Profil</span></a>
+        <a class="nav-link logout-link" href="{{ url_for('logout') }}">↪ <span>Logout</span></a>
+    </div>
+</div>
+<main class="main-content">
+    <header class="topbar">
+        <div><div class="eyebrow">Sistem Ketersediaan Darah Kabupaten Bojonegoro</div><h1>{% block page_heading %}Dashboard{% endblock %}</h1></div>
+        <div class="user-pill"><span class="avatar">{{ (session.get('nama') or session.get('username','U'))[0]|upper }}</span><span><b>{{ session.get('nama') or session.get('username') }}</b><small>{{ session.get('role','user')|capitalize }}</small></span></div>
+    </header>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}<div class="flash-wrap">{% for message in messages %}<div class="flash">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>
